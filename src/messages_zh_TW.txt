@@ -1,0 +1,32 @@
+//main.java
+title=撲克牌記憶遊戲
+//關於
+	about=關於
+	version=版本: 
+	author=作者: 
+	author.website=作者網站: 
+	publish_date=日期: 
+		version.content=v3.1
+		author.content=元兒～
+		author.website.content=http://yuan817.blogspot.tw
+		publish_date.content=2012.8.22
+		
+//視窗介面
+	main.ui.JMenu.gameMenu=遊戲
+		main.ui.JMenuItem.gameMenu.start=開始
+		main.ui.JMenuItem.gameMenu.exit=不玩了
+	main.ui.JMenu.display=顯示
+		main.ui.JLabel.display.display_all_card=顯示所有的牌
+			main.ui.JRadioButtonMenuItem.display.display_cards_true=是
+			main.ui.JRadioButtonMenuItem.display.display_cards_false=否
+		main.ui.JMenuItem.display.paidCards_button=已配對的牌
+	main.ui.JLabel.jpanel_center.score_label=分數: 
+	
+//提示文字
+	main.ui.alert.get_one_point=恭喜你！獲得1分！！
+	main.ui.alert.please_fold=請先蓋牌！！
+	
+//PaidCards_app.java
+//已配對的牌視窗
+	PaidCards_app.ui.paid_cards_title=以下是已湊成一對：
+	PaidCards_app.ui.back=返回
