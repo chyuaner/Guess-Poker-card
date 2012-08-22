@@ -6,6 +6,8 @@
  * 作者:			元兒～
  * Version:     v3.1
  * 更新資訊: 
+ * ├─ v3.1.1 -2012.8.2
+ * │  └─ 修正Alt+G、Alt+V快速鍵對應錯的問題
  * ├─ v3.1 -2012.8.22
  * │  ├─ 在code上增加些會出現什麼字的註解
  * │  └─ 將所有文字拉出成資源檔（繁體中文、英文）
@@ -76,7 +78,7 @@ public class main extends JFrame implements ActionListener{
 		menuBar.add(gameMenu); // 新增gameMenu選單
 		
 		JMenu viewMenu = new JMenu(resource.getString("main.ui.JMenu.display")+"(V)"); // 第二個選單
-		viewMenu.setMnemonic(KeyEvent.VK_G);
+		viewMenu.setMnemonic(KeyEvent.VK_V);
 			viewMenu.add(new JLabel(" "+resource.getString("main.ui.JLabel.display.display_all_card"))); //新增"顯示所有的牌"選項
 			ButtonGroup display_cards = new ButtonGroup();
 			display_cards_true = new JRadioButtonMenuItem(resource.getString("main.ui.JRadioButtonMenuItem.display.display_cards_true")); //新增"是"選項
