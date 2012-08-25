@@ -2,11 +2,13 @@
  * 撲克牌記憶遊戲
  * FileName:	main.java
  *
- * 日期:  		2012.8.22
+ * 日期:  		2012.8.25
  * 作者:			元兒～
- * Version:     v3.1
+ * Version:     v3.2
  * 更新資訊: 
- * ├─ v3.1.1 -2012.8.2
+ * ├─ v3.2 -2012.8.25
+ * │  └─ 將原本使用的ResourceBundle類別物件改成字型撰寫的Language物件，讓程式在在語言檔無法正常載入的情況下還可以繼續執行
+ * ├─ v3.1.1 -2012.8.22
  * │  └─ 修正Alt+G、Alt+V快速鍵對應錯的問題
  * ├─ v3.1 -2012.8.22
  * │  ├─ 在code上增加些會出現什麼字的註解
@@ -30,10 +32,10 @@ import game.card.poker.Cards;
 import game.score.PlayerScore;
 import javax.swing.*;
 
+import tools.multiple_languages.Language;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class main extends JFrame implements ActionListener{
 	//建立自行寫的類別為物件
@@ -43,12 +45,10 @@ public class main extends JFrame implements ActionListener{
 	//定義數值內容
 	private boolean display_cards = false; //是否顯示偷偷看全部的牌
 	private final String URL_IMAGE_CARD="res/image/poker_resize/card-rank_"; //指定圖片路徑
-	private final String URL_GET_STRING="messages";
 	
-	//取得目前作業系統的地區別
-	Locale currentLocale = Locale.getDefault();	
-	ResourceBundle resource = ResourceBundle.getBundle(URL_GET_STRING,currentLocale);
-	
+	//建立多國語言
+	private Language lang = new Language("messages");
+
 	//建立UI介面的所需物件
 	private JLabel score_label;
 	private JButton[] button = new JButton[52];
@@ -59,38 +59,38 @@ public class main extends JFrame implements ActionListener{
 	
 	public main(){
 		//super("撲克牌記憶遊戲");
-		this.setTitle(resource.getString("title")); //設定視窗標題
+		this.setTitle(lang.getString("title")); //設定視窗標題
 		//=====功能表=====
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);  // 新增下拉式功能表
-		JMenu gameMenu = new JMenu(resource.getString("main.ui.JMenu.gameMenu")+"(G)"); // 第一個選單
+		JMenu gameMenu = new JMenu(lang.getString("main.ui.JMenu.gameMenu")+"(G)"); // 第一個選單
 		gameMenu.setMnemonic(KeyEvent.VK_G);
-			reDeal_button = new JMenuItem(resource.getString("main.ui.JMenuItem.gameMenu.start")+"(Alt+s)",KeyEvent.VK_S); //新增"開始"選項
+			reDeal_button = new JMenuItem(lang.getString("main.ui.JMenuItem.gameMenu.start")+"(Alt+s)",KeyEvent.VK_S); //新增"開始"選項
 			reDeal_button.addActionListener(this);
 			gameMenu.add(reDeal_button);
-			exit_button = new JMenuItem(resource.getString("main.ui.JMenuItem.gameMenu.exit")+"(Alt+e)",KeyEvent.VK_E); //新增"不玩了"選項
+			exit_button = new JMenuItem(lang.getString("main.ui.JMenuItem.gameMenu.exit")+"(Alt+e)",KeyEvent.VK_E); //新增"不玩了"選項
 			exit_button.addActionListener(this);
 			gameMenu.add(exit_button);
 			gameMenu.addSeparator();  // 分隔線
-			about_button = new JMenuItem(resource.getString("about")+"(Alt+a)",KeyEvent.VK_A); //新增"關於"選項
+			about_button = new JMenuItem(lang.getString("about")+"(Alt+a)",KeyEvent.VK_A); //新增"關於"選項
 			about_button.addActionListener(this);
 			gameMenu.add(about_button);
 		menuBar.add(gameMenu); // 新增gameMenu選單
 		
-		JMenu viewMenu = new JMenu(resource.getString("main.ui.JMenu.display")+"(V)"); // 第二個選單
+		JMenu viewMenu = new JMenu(lang.getString("main.ui.JMenu.display")+"(V)"); // 第二個選單
 		viewMenu.setMnemonic(KeyEvent.VK_V);
-			viewMenu.add(new JLabel(" "+resource.getString("main.ui.JLabel.display.display_all_card"))); //新增"顯示所有的牌"選項
+			viewMenu.add(new JLabel(" "+lang.getString("main.ui.JLabel.display.display_all_card"))); //新增"顯示所有的牌"選項
 			ButtonGroup display_cards = new ButtonGroup();
-			display_cards_true = new JRadioButtonMenuItem(resource.getString("main.ui.JRadioButtonMenuItem.display.display_cards_true")); //新增"是"選項
+			display_cards_true = new JRadioButtonMenuItem(lang.getString("main.ui.JRadioButtonMenuItem.display.display_cards_true")); //新增"是"選項
 			display_cards_true.addActionListener(this);
 			display_cards.add(display_cards_true);
 			viewMenu.add(display_cards_true);
-			display_cards_false = new JRadioButtonMenuItem(resource.getString("main.ui.JRadioButtonMenuItem.display.display_cards_false")); //新增"否"選項
+			display_cards_false = new JRadioButtonMenuItem(lang.getString("main.ui.JRadioButtonMenuItem.display.display_cards_false")); //新增"否"選項
 			display_cards_false.addActionListener(this);
 			display_cards.add(display_cards_false);
 			viewMenu.add(display_cards_false);
 			viewMenu.addSeparator();  // 分隔線
-			paidCards_button = new JMenuItem(resource.getString("main.ui.JMenuItem.display.paidCards_button")+"(Alt+d)",KeyEvent.VK_D); //新增"已配對的牌"選項
+			paidCards_button = new JMenuItem(lang.getString("main.ui.JMenuItem.display.paidCards_button")+"(Alt+d)",KeyEvent.VK_D); //新增"已配對的牌"選項
 			paidCards_button.addActionListener(this);
 			viewMenu.add(paidCards_button);
 		menuBar.add(viewMenu); // 新增viewMenu選單
@@ -110,7 +110,7 @@ public class main extends JFrame implements ActionListener{
 					button[i].addActionListener(this);
 					jpanel_center.add(button[i]);
 				}
-				score_label = new JLabel(resource.getString("main.ui.JLabel.jpanel_center.score_label") + score.get_score());
+				score_label = new JLabel(lang.getString("main.ui.JLabel.jpanel_center.score_label") + score.get_score());
 				jpanel_center.add(score_label);
 			/*//下方的"確定"、"取消"
 			JPanel jpanel_down = new JPanel(); // 建立JPanel物件
@@ -152,7 +152,7 @@ public class main extends JFrame implements ActionListener{
 				button[i].setIcon(new ImageIcon(URL_IMAGE_CARD+"back.jpg"));
 				display_cards = false;
 				//button[i].setText(""+cards.get_card_text(i)%13); //DEBUG
-				score_label.setText(resource.getString("main.ui.JLabel.jpanel_center.score_label")+": " + score.get_score());
+				score_label.setText(lang.getString("main.ui.JLabel.jpanel_center.score_label")+": " + score.get_score());
 			}
 		}
 		//按下結束
@@ -162,12 +162,12 @@ public class main extends JFrame implements ActionListener{
 		//按下關於
 		else if(evt.getSource() == about_button){
 			JOptionPane.showMessageDialog(
-			button[0],resource.getString("title")+"\n"
-					+resource.getString("version")+resource.getString("version.content")+"\n"
-					+resource.getString("author")+resource.getString("author.content")+"\n"
-					+resource.getString("author.website")+resource.getString("author.website.content")+"\n"
-					+resource.getString("publish_date")+resource.getString("publish_date.content")
-					,resource.getString("about"),JOptionPane.INFORMATION_MESSAGE);
+			button[0],lang.getString("title")+"\n"
+					+lang.getString("version")+lang.getString("version.content")+"\n"
+					+lang.getString("author")+lang.getString("author.content")+"\n"
+					+lang.getString("author.website")+lang.getString("author.website.content")+"\n"
+					+lang.getString("publish_date")+lang.getString("publish_date.content")
+					,lang.getString("about"),JOptionPane.INFORMATION_MESSAGE);
 			//JOptionPane繼承自button[0]
 		}
 		//翻開全部的牌（偷看用）
@@ -195,16 +195,16 @@ public class main extends JFrame implements ActionListener{
 						cards.set_card_open(i,true);
 						if(cards.card_open_num(i,cards.get_card_text(i))==2){
 							score.to_score(1);
-							JOptionPane.showMessageDialog(button[i],resource.getString("main.ui.alert.get_one_point"),resource.getString("title"),JOptionPane.INFORMATION_MESSAGE); //顯示"恭喜你！獲得1分！！"訊息
+							JOptionPane.showMessageDialog(button[i],lang.getString("main.ui.alert.get_one_point"),lang.getString("title"),JOptionPane.INFORMATION_MESSAGE); //顯示"恭喜你！獲得1分！！"訊息
 							button[i].setVisible(false);
 							button[cards.get_openCardButton1()].setVisible(false);
 							paidCards_app.add_update(cards.get_card_paid_text());
 						}
-						score_label.setText(resource.getString("main.ui.JLabel.jpanel_center.score_label") + score.get_score());
+						score_label.setText(lang.getString("main.ui.JLabel.jpanel_center.score_label") + score.get_score());
 						//score_label.setText("X: " + cards.get_card_open_total()); //DEBUG-顯示已經翻開幾張牌
 					}
 					else{
-						JOptionPane.showMessageDialog(button[i],resource.getString("main.ui.alert.please_fold"),resource.getString("title"),JOptionPane.WARNING_MESSAGE); //顯示"請先蓋牌！！"訊息
+						JOptionPane.showMessageDialog(button[i],lang.getString("main.ui.alert.please_fold"),lang.getString("title"),JOptionPane.WARNING_MESSAGE); //顯示"請先蓋牌！！"訊息
 					}
 				}
 				//當這張牌是已翻開的狀態
