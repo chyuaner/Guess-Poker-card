@@ -1,10 +1,12 @@
 /**
  * FileName:	Cards.java
  *
- * 日期:  		2012.8.22
+ * 日期:  		2012.9.2
  * 作者:			元兒～
- * Version:     v1.0
+ * Version:     v1.0.1
  * 更新資訊: 
+ * ├─ v1.0.1 -2012.9.2
+ * │  └─ 小幅修改reDeal()裡的card_text[i] = n.getNumber(52,true);（因應Num_rand類別的更新）
  * └─ v1.0 -2012.8.22
  *    ├─ 改使用Eclipse作為這支程式的開發 
  *    └─ 將這個class包成package
@@ -30,7 +32,7 @@ public class Cards{
 	public void reDeal(){
 		n.shuffle();
 		for(int i=0;i<52;i++){
-			card_text[i] = n.getNumber(52);
+			card_text[i] = n.getNumber(52,true);
 			card_open[i] = false;
 		}
 		card_open_total = 0;
